@@ -13,7 +13,7 @@ import numpy as np
 isDebug = False
 
 # バージョン
-ver = '1.0.0'
+ver = '1.1.0'
 
 # 各種初期設定 #####################################
 # bot用コンフィグの読み込み
@@ -78,9 +78,10 @@ except Exception as e:
 @commandsBot.event
 async def event_ready():
     print(f"{configCommands.Trans_Username}がオンラインになりました!")
-    botws = commandsBot._ws  # this is only needed to send messages within event_ready
+    # this is only needed to send messages within event_ready
+    botws = commandsBot._ws
     await botws.send_privmsg(configCommands.Twitch_Channel, f"/color {configCommands.TextColor}")
-    await botws.send_privmsg(configCommands.Twitch_Channel, f"/me accepts command!")
+    await botws.send_privmsg(configCommands.Twitch_Channel, "/me accepts command!")
 
 
 # helloコマンド処理 ----------
@@ -94,12 +95,62 @@ async def hello(ctx):
 @commandsBot.command()
 async def bot(ctx):
     implemented = '''
+    streamStart、
+    streamStop、
     scene、
     vol、
     move、
     onoff
     '''
     await ctx.send('実装済のコマンドは以下のとおりです' + implemented)
+    time.sleep(1)
+
+
+# 配信Start/Stopコマンド処理 ----------
+# 入力値エラーチェック
+def errorCheck_startstop(ctx):
+    if obsCommands.startstop_isModOnly:
+        if not ctx.author.is_mod:
+            return 'isMod'
+    return 'True'
+
+
+# コマンドstreamStart
+@commandsBot.command()
+async def streamStart(ctx):
+    error = errorCheck_startstop(ctx)
+    if error == 'isMod':
+        print(f"streamStart:ユーザー({ctx.author.name})はモデレーター権限を持っていません")
+        await ctx.send('すみません、モデレーター権限が無いと実行できません FBBlock')
+    if error != 'True':
+        return
+
+    result = ws.call(requests.StartStreaming())
+    if result.status:
+        print("streamStart:Streamを開始しました")
+    else:
+        print("streamStart:Streamの開始に失敗しました")
+        print('Please check [param_commandsBot.py]')
+    time.sleep(5)
+
+
+# コマンドstreamStop
+@commandsBot.command()
+async def streamStop(ctx):
+    error = errorCheck_startstop(ctx)
+    if error == 'isMod':
+        print(f"streamStop:ユーザー({ctx.author.name})はモデレーター権限を持っていません")
+        await ctx.send('すみません、モデレーター権限が無いと実行できません FBBlock')
+    if error != 'True':
+        return
+
+    result = ws.call(requests.StopStreaming())
+    if result.status:
+        print("streamStop:Streamを停止しました")
+    else:
+        print("streamStop:Streamの停止に失敗しました")
+        print('Please check [param_commandsBot.py]')
+    time.sleep(5)
 
 
 # シーン変更コマンド処理 ----------
@@ -156,7 +207,7 @@ async def scene02(ctx):
     time.sleep(5)
 
 
-# 音量変更コマンド処理 ----------
+# ソース音量変更コマンド処理 ----------
 # 入力値エラーチェック
 def errorCheck_vol(ctx, args, volume):
     if len(args) < 1:
@@ -171,7 +222,7 @@ def errorCheck_vol(ctx, args, volume):
     return 'True'
 
 
-# 音量変更実行
+# ソース音量変更実行
 def changeVolume(source, volume):
     if volume == 0:
         dB = -99.9
@@ -430,7 +481,7 @@ async def move02(ctx, *args):
 def errorCheck_onoff(ctx, args, set):
     if len(args) < 1:
         return 'shortInputs'
-    if obsCommands.vol_isModOnly:
+    if obsCommands.onoff_isModOnly:
         if not ctx.author.is_mod:
             return 'isMod'
     if not (set == 'ON' or set == 'OFF'):

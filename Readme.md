@@ -24,6 +24,10 @@ Twitchのチャット欄に指定のコマンドを入力することによっ�
     挨拶を返す
  - **bot**
     実装されているコマンド一覧
+ - **streamStart**
+    配信を開始するコマンド
+ - **stremaStop**
+    配信を停止するコマンド
  - **sceneXX**
     シーンを変更するコマンド
  - **volXX**
@@ -34,6 +38,16 @@ Twitchのチャット欄に指定のコマンドを入力することによっ�
     ソースをＯＮ／ＯＦＦするコマンド
 
 ## コマンド詳細
+ - **streamStart**
+    + コマンドフォーマット  
+     [BOT_PREFIX]streamStart
+    + コマンド例  
+     !streamStart
+ - **streamStop**
+    + コマンドフォーマット  
+     [BOT_PREFIX]streamStop
+    + コマンド例  
+     !streamStop
  - **sceneXX**
     + コマンドフォーマット  
      [BOT_PREFIX]sceneXX
@@ -81,6 +95,12 @@ Twitchのチャット欄に指定のコマンドを入力することによっ�
   https://github.com/KinGun240
 
 # 履歴
+## バージョン 1.1.0
+ - 2022/06/02  
+   ON/OFFコマンド用のonoff_isModOnlyが機能していなかった不具合を修正
+   [param_commandsBot.py]の抜け・誤記を修正
+   OBS落とし忘れ用に配信Start/Stopコマンドを追加
+
 ## バージョン 1.0.0
  - 2022/05/29  
    とりあえずそれっぽい感じで作成
