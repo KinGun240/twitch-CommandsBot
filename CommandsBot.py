@@ -13,7 +13,7 @@ import numpy as np
 isDebug = False
 
 # バージョン
-ver = '1.1.0'
+ver = '1.1.1'
 
 # 各種初期設定 #####################################
 # bot用コンフィグの読み込み
@@ -108,8 +108,15 @@ async def bot(ctx):
 
 # 配信Start/Stopコマンド処理 ----------
 # 入力値エラーチェック
-def errorCheck_startstop(ctx):
-    if obsCommands.startstop_isModOnly:
+def errorCheck_start(ctx):
+    if obsCommands.start_isModOnly:
+        if not ctx.author.is_mod:
+            return 'isMod'
+    return 'True'
+
+
+def errorCheck_stop(ctx):
+    if obsCommands.stop_isModOnly:
         if not ctx.author.is_mod:
             return 'isMod'
     return 'True'
@@ -118,7 +125,7 @@ def errorCheck_startstop(ctx):
 # コマンドstreamStart
 @commandsBot.command()
 async def streamStart(ctx):
-    error = errorCheck_startstop(ctx)
+    error = errorCheck_start(ctx)
     if error == 'isMod':
         print(f"streamStart:ユーザー({ctx.author.name})はモデレーター権限を持っていません")
         await ctx.send('すみません、モデレーター権限が無いと実行できません FBBlock')
@@ -137,7 +144,7 @@ async def streamStart(ctx):
 # コマンドstreamStop
 @commandsBot.command()
 async def streamStop(ctx):
-    error = errorCheck_startstop(ctx)
+    error = errorCheck_stop(ctx)
     if error == 'isMod':
         print(f"streamStop:ユーザー({ctx.author.name})はモデレーター権限を持っていません")
         await ctx.send('すみません、モデレーター権限が無いと実行できません FBBlock')

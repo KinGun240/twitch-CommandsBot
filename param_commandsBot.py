@@ -1,7 +1,8 @@
 # パラメーター項目 ###########################
 # 配信Start/Stopコマンド(streamStart/streamStop) ----------
-# モデレーター権限を持つユーザーだけに限定させたい場合は、startstop_isModOnlyをTrueに設定してください
-startstop_isModOnly = True
+# モデレーター権限を持つユーザーだけに限定させたい場合は、start_isModOnly/stop_isModOnlyをTrueに設定してください
+start_isModOnly = True
+stop_isModOnly = True
 
 # シーン変更コマンド(sceneXX) ----------
 # モデレーター権限を持つユーザーだけに限定させたい場合は、scene_isModOnlyをTrueに設定してください
