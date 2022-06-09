@@ -1,3 +1,6 @@
+# Copyright 2022 KinGun
+# This software is released under the MIT License, see LICENSE.
+
 from twitchio.ext import commands
 from obswebsocket import obsws, requests
 

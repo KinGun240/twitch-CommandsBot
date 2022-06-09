@@ -108,3 +108,6 @@ Twitchのチャット欄に指定のコマンドを入力することによっ�
 ## バージョン 1.0.0
 **2022/05/29**  
 + とりあえずそれっぽい感じで作成  
+
+# License
+The source code is licensed MIT.
